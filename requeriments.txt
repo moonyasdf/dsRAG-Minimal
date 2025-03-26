@@ -15,7 +15,7 @@ ollama>=0.2.0
 
 # Embedding Local (Hugging Face)
 sentence-transformers>=2.2.0
-torch>=1.8.0 # Dependencia de sentence-transformers (CPU o GPU)
+torch>=1.8.0 # O torch-cpu si no se necesita GPU
 
 # Reranker Local (Jina AI)
 jina-reranker>=0.5.0 # Verifica la versión más reciente
