@@ -1,1 +1,1 @@
-# dsRAG-minimalist
+# dsRAG-Minimalist
