@@ -1,0 +1,13 @@
+INSTRUCTIONS
+What is the title of the following document?
+
+Your response MUST be the title of the document, and nothing else. DO NOT respond with anything else.
+
+{document_title_guidance}
+
+{non_english_addendum}
+
+{truncation_message}
+
+DOCUMENT
+{document_text}
