@@ -2,7 +2,7 @@
 import numpy as np
 import os
 import time
-import warnings # Añadido para warnings
+import warnings
 from typing import Optional, Union, Dict, List, Any
 import concurrent.futures
 from tqdm import tqdm
@@ -14,13 +14,13 @@ from dsparse.models.types import FileParsingConfig, SemanticSectioningConfig, Ch
 from dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
 
 # Desde core (mismo paquete)
-from core.embedding import Embedding, OllamaEmbedding # Importa las clases base/concretas que podrías necesitar aquí
+from core.embedding import Embedding, OllamaEmbedding
 from core.reranker import Reranker, NoReranker
-from core.llm import LLM #, OllamaLLM, OpenAILLM, AnthropicLLM # No necesitas importar las concretas aquí si se inyectan
+from core.llm import LLM
 from core.rse import get_relevance_values, get_best_segments, get_meta_document, RSE_PARAMS_PRESETS
 from core.auto_context import (
-    get_document_title, get_document_summary, get_section_summary,
-    get_chunk_header, get_segment_header, _load_prompt
+     get_document_title, get_document_summary, get_section_summary,
+     get_chunk_header, get_segment_header, _load_prompt
 )
 
 # Desde database (paquete hermano)
