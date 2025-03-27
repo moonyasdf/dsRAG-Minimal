@@ -3,14 +3,14 @@ import os
 from typing import List, Tuple, Optional, Dict, Any
 
 # Importaciones internas refactorizadas
-from .file_parsing.non_vlm_file_parsing import parse_file_no_vlm
-from .sectioning_and_chunking.semantic_sectioning import get_sections_from_str, get_sections_from_pages
-from .sectioning_and_chunking.chunking import chunk_document
-from .models.types import FileParsingConfig, SemanticSectioningConfig, ChunkingConfig, Section, Chunk, Line
-from .file_parsing.file_system import FileSystem, LocalFileSystem
+from dsparse.file_parsing.non_vlm_file_parsing import parse_file_no_vlm, extract_text_from_docx, extract_text_from_pdf # Añadido extract*
+from dsparse.sectioning_and_chunking.semantic_sectioning import get_sections_from_str, get_sections_from_pages, str_to_lines # Añadido str_to_lines
+from dsparse.sectioning_and_chunking.chunking import chunk_document
+from dsparse.models.types import FileParsingConfig, SemanticSectioningConfig, ChunkingConfig, Section, Chunk, Line
+from dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
 
 # Importa LLM para pasarlo a semantic_sectioning
-from ..core.llm import LLM
+from core.llm import LLM
 
 def parse_and_chunk(
     kb_id: str,
