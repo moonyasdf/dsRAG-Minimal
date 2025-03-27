@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 
 # Importa LLM y función de respuesta inyectable
-from ..core.llm import LLM, get_response_via_instance
+from core.llm import LLM, get_response_via_instance
 
 # --- Carga de Prompt ---
 PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', 'prompts')
