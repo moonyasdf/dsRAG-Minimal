@@ -1,5 +1,5 @@
 # dsrag_minimal/database/vector/types.py
-from typing import Optional, Sequence, Union, List, Dict, Any
+from typing import Optional, Sequence, Union, List, Dict, Any # Añadido Dict, Any
 from typing_extensions import TypedDict
 import numpy as np
 
