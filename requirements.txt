@@ -3,33 +3,32 @@
 # Core dsRAG Minimal
 numpy>=1.21.0
 pydantic>=2.5.0
-instructor>=1.3.0 # Para salida estructurada LLM
+instructor>=1.3.0
 tqdm>=4.60.0
 langchain-text-splitters>=0.3.0
 
 # Vector DB (Qdrant)
 qdrant-client>=1.9.0
 
+# Chunk DB (SQLite - Python built-in)
+
 # LLM / Embedding Local (Ollama)
 ollama>=0.2.0
 
-# Embedding Local (Hugging Face)
+# Embedding / Reranker Local (Hugging Face)
 sentence-transformers>=2.2.0
-torch>=1.8.0 # O torch-cpu si no se necesita GPU
+torch>=1.8.0 # O torch-cpu
 
-# Reranker Local (Jina AI)
-jina-reranker>=0.5.0 # Verifica la versión más reciente
-
-# LLM API (Opcional, para ejemplos/flexibilidad)
+# LLM API (Opcional)
 openai>=1.10.0
 anthropic>=0.20.0
 
 # File Parsing (No VLM)
 pypdf2>=3.0.0
-docx2txt>=0.8 # Dependencia para .docx
+docx2txt>=0.8
 
-# Dependencias Transitivas Comunes (verificar si son necesarias)
-PyYAML>=6.0 # Usado por langchain-core -> langchain-text-splitters
+# Dependencias Transitivas
+PyYAML>=6.0
 # requests>=2.25.0 # Instalado por otros paquetes
 # typing-extensions>=4.0.0 # Instalado por pydantic/instructor
 # httpx>=0.25.0 # Instalado por openai/anthropic
