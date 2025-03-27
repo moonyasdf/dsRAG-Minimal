@@ -3,6 +3,8 @@
    
 <i>*The original creators of [dsRAG](https://github.com/D-Star-AI/dsRAG) are Zach and Nick McCormick.*</i><br><br>
 
+</div>
+
 ## What is dsRAG?
 dsRAG is a retrieval engine for unstructured data. It is especially good at handling challenging queries over dense text, like financial reports, legal documents, and academic papers. dsRAG achieves substantially higher accuracy than vanilla RAG baselines on complex open-book question answering tasks. On one especially challenging benchmark, [FinanceBench](https://arxiv.org/abs/2311.11944), dsRAG gets accurate answers 96.6% of the time, compared to the vanilla RAG baseline which only gets 32% of questions correct.
 
