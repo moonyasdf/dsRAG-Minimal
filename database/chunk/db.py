@@ -1,7 +1,7 @@
 # dsrag_minimal/database/chunk/db.py
 from abc import ABC, abstractmethod
-from typing import Any, Optional, List, Dict, Tuple
-from .types import FormattedDocument
+from typing import Any, Optional, List, Dict, Tuple # Añadido Tuple
+from database.chunk.types import FormattedDocument
 
 class ChunkDB(ABC):
     """Clase base abstracta para almacenar el contenido de los chunks."""
