@@ -5,7 +5,8 @@ import numpy as np
 
 # Importación opcional para JinaReranker
 try:
-    from jina_reranker import JinaReranker as JinaRerankerClient
+    # Renombrado para claridad
+    from jina_reranker import Reranker as JinaRerankerClient
     JINA_RERANKER_AVAILABLE = True
 except ImportError:
     JINA_RERANKER_AVAILABLE = False
