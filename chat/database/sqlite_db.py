@@ -9,8 +9,8 @@ import logging
 import contextlib
 from typing import List, Dict, Any, Optional, ContextManager
 
-from .db import ChatThreadDB
-from ..chat_types import ChatThreadParams
+from chat.database.db import ChatThreadDB
+from chat.chat_types import ChatThreadParams
 
 class SQLiteChatThreadDB(ChatThreadDB):
     """Implementación de ChatThreadDB usando SQLite."""
