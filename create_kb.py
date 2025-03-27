@@ -2,21 +2,22 @@
 # (Versión simplificada enfocada en `create_kb_from_file`)
 import os
 import time
+import warnings # Añadido
 from typing import Optional, Dict, Any
 
-# Importa componentes refactorizados
-from .core.knowledge_base import KnowledgeBase
-from .core.embedding import Embedding
-from .core.llm import LLM
-from .core.reranker import Reranker
-from .database.vector.qdrant_db import QdrantVectorDB
-from .database.chunk.sqlite_db import SQLiteDB
-from .dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
-from .metadata import MetadataStorage, LocalMetadataStorage
+# Importaciones absolutas
+from core.knowledge_base import KnowledgeBase
+from core.embedding import Embedding # Solo base
+from core.llm import LLM # Solo base
+from core.reranker import Reranker # Solo base
+from database.vector.qdrant_db import QdrantVectorDB
+from database.chunk.sqlite_db import SQLiteDB
+from dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
+from metadata import MetadataStorage, LocalMetadataStorage
 
 # Importa parsers directamente
-from .dsparse.file_parsing.non_vlm_file_parsing import (
-    extract_text_from_pdf, extract_text_from_docx
+from dsparse.file_parsing.non_vlm_file_parsing import (
+    extract_text_from_pdf, extract_text_from_docx, parse_file_no_vlm # Añadido parse_file_no_vlm
 )
 
 def create_kb_from_file(
