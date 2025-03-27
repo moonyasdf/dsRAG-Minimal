@@ -3,7 +3,7 @@ import os
 from typing import Optional, List, Dict, Any
 
 # Asume que LLM y get_response_via_instance están en core.llm
-from .llm import LLM, get_response_via_instance
+from core.llm import LLM, get_response_via_instance
 # Asume que _load_prompt está definido aquí o importado
 # (Se define aquí por simplicidad, podría estar en utils)
 
