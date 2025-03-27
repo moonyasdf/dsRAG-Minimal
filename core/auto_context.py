@@ -7,7 +7,7 @@ from .llm import LLM, get_response_via_instance
 # Asume que _load_prompt está definido aquí o importado
 # (Se define aquí por simplicidad, podría estar en utils)
 
-PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', 'prompts')
+PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', 'prompts') # Ruta a prompts
 
 def _load_prompt(filename: str) -> str:
     """Carga un prompt desde el directorio 'prompts'."""
