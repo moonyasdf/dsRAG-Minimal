@@ -6,11 +6,12 @@
 from typing import Sequence, cast, List, Dict, Any, Optional
 import uuid
 import numpy as np
+import warnings # Añadido para warnings
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.models import Distance, VectorParams
 
-from .db import VectorDB # Importa la clase base simplificada
-from .types import ChunkMetadata, Vector, VectorSearchResult, MetadataFilter # Importa tipos
+from database.vector.db import VectorDB # Importa la clase base simplificada
+from database.vector.types import ChunkMetadata, Vector, VectorSearchResult, MetadataFilter # Importa tipos
 
 def convert_id(_id: str) -> str:
     """Convierte string a UUID para Qdrant."""
