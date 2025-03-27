@@ -1,7 +1,7 @@
 # dsrag_minimal/database/vector/db.py
 from abc import ABC, abstractmethod
 from typing import Sequence, Optional, List, Dict, Any
-from .types import ChunkMetadata, Vector, VectorSearchResult, MetadataFilter
+from database.vector.types import ChunkMetadata, Vector, VectorSearchResult, MetadataFilter
 
 class VectorDB(ABC):
     """Clase base abstracta para bases de datos vectoriales."""
