@@ -1,10 +1,10 @@
 # dsrag_minimal/core/llm.py
 from abc import ABC, abstractmethod
-from typing import Optional, List, Dict, Any, Iterator
+from typing import Optional, List, Dict, Any, Iterator, Union # Añadido Union
 import os
 import ollama
-from openai import OpenAI, Stream
-from anthropic import Anthropic, Stream as AnthropicStream
+from openai import OpenAI, Stream # Importa Stream
+from anthropic import Anthropic, Stream as AnthropicStream # Importa Stream de Anthropic
 import instructor
 from pydantic import BaseModel
 import warnings
