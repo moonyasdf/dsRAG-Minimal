@@ -109,3 +109,29 @@ kb = KnowledgeBase(
     storage_directory=storage_dir # For SQLite chunks/metadata
     # vector_dimension is inferred or passed to Qdrant directly
 )
+```
+## Example: Initializing with OpenAI API Models
+```python
+from dsrag_minimal.core import KnowledgeBase, OpenAIEmbedding, OpenAILLM, NoReranker
+# ... other imports
+
+# 1. Instantiate API Models (Requires OPENAI_API_KEY env var)
+embedding_api = OpenAIEmbedding(model="text-embedding-3-small", dimension=768)
+llm_api = OpenAILLM(model="gpt-4o-mini")
+# Use NoReranker or a compatible API reranker if available
+
+# 2. Configure Storage
+# ... (setup qdrant_db as before, ensuring vector_dimension matches embedding_api.dimension) ...
+qdrant_db_api = QdrantVectorDB(kb_id="my_api_kb", vector_dimension=embedding_api.dimension, path=qdrant_path)
+
+
+# 3. Inject into KnowledgeBase
+kb_api = KnowledgeBase(
+    kb_id="my_api_kb",
+    embedding_model=embedding_api,
+    auto_context_model=llm_api,
+    reranker=NoReranker(), # Or an API reranker instance
+    vector_db=qdrant_db_api,
+    storage_directory=storage_dir
+)
+```
