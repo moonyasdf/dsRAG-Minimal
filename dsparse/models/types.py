@@ -1,4 +1,5 @@
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, List # Añadido List
+# Importa FileSystem desde la ubicación correcta
 from ..file_parsing.file_system import FileSystem
 
 class Line(TypedDict):
