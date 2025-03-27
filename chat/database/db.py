@@ -1,8 +1,7 @@
 # dsrag_minimal/chat/database/db.py
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
-
-# Importa tipos necesarios desde chat_types
+# Usa ruta relativa correcta a chat_types
 from ..chat_types import ChatThreadParams
 
 class ChatThreadDB(ABC):
