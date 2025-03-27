@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 import numpy as np
-import warnings
+import warnings # Añadido para warnings
 
 # Importación opcional para CrossEncoder
 try:
