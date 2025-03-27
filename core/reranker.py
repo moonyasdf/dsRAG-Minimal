@@ -2,15 +2,15 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 import numpy as np
+import warnings
 
-# Importación opcional para JinaReranker
+# Importación opcional para CrossEncoder
 try:
-    # Renombrado para claridad
-    from jina_reranker import Reranker as JinaRerankerClient
-    JINA_RERANKER_AVAILABLE = True
+    from sentence_transformers import CrossEncoder
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
 except ImportError:
-    JINA_RERANKER_AVAILABLE = False
-    class JinaRerankerClient: pass # Placeholder
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
+    class CrossEncoder: pass # Placeholder
 
 class Reranker(ABC):
     """Clase base abstracta para modelos de reranking."""
@@ -30,12 +30,10 @@ class Reranker(ABC):
         pass
 
     def to_dict(self):
-        """Serializa la configuración del reranker."""
         return {"subclass_name": self.__class__.__name__}
 
     @classmethod
     def from_dict(cls, config: dict) -> 'Reranker':
-        """Crea una instancia de Reranker desde la configuración."""
         subclass_name = config.get("subclass_name")
         if subclass_name in cls.SUBCLASSES:
              Subclass = cls.SUBCLASSES[subclass_name]
@@ -47,12 +45,13 @@ class Reranker(ABC):
              except TypeError as e:
                   raise ValueError(f"Invalid config for {subclass_name}: {e}") from e
         else:
+            # Intenta cargar NoReranker como default si no se especifica subclase
+            if subclass_name is None:
+                return NoReranker()
             raise ValueError(f"Unknown reranker subclass: {subclass_name}")
 
 class NoReranker(Reranker):
     """Implementación que no realiza reranking."""
-    # (Implementación sin cambios respecto a la anterior)
-    # ... (copiar de la versión anterior) ...
     def __init__(self, assign_default_score: bool = False, default_score: float = 0.5, **kwargs):
         self.assign_default_score = assign_default_score
         self.default_score = default_score
@@ -62,7 +61,13 @@ class NoReranker(Reranker):
             for doc in documents:
                 doc['similarity'] = self.default_score
         # Ordena por score original si existe, si no, mantiene el orden
-        return sorted(documents, key=lambda x: x.get('similarity', 0.0), reverse=True)
+        try:
+             # Intenta ordenar numéricamente
+             return sorted(documents, key=lambda x: float(x.get('similarity', 0.0)), reverse=True)
+        except (ValueError, TypeError):
+             # Si similarity no es numérico, devuelve tal cual
+             warnings.warn("Could not sort documents by similarity score in NoReranker.")
+             return documents
 
 
     def to_dict(self):
@@ -72,73 +77,70 @@ class NoReranker(Reranker):
             "default_score": self.default_score
         }
 
-class JinaReranker(Reranker):
-    """Implementación de Reranker usando Jina AI."""
-    def __init__(self, model_name: str = "jina-reranker-v2-base-multilingual", api_key: Optional[str] = None, device: Optional[str] = None, **kwargs):
-        if not JINA_RERANKER_AVAILABLE:
-            raise ImportError("JinaReranker requires 'jina-reranker'. Install with 'pip install -U jina-reranker'")
+class CrossEncoderReranker(Reranker):
+    """Implementación de Reranker usando sentence_transformers.CrossEncoder."""
+    def __init__(self, model_name: str = "jinaai/jina-reranker-v2-base-multilingual", device: Optional[str] = None, **kwargs):
+        if not SENTENCE_TRANSFORMERS_AVAILABLE:
+            raise ImportError("CrossEncoderReranker requires 'sentence-transformers'. Install with 'pip install sentence-transformers'")
 
         self.model_name = model_name
-        self.api_key = api_key or os.environ.get("JINA_API_KEY") # Opcional, para API
-        # Jina client infiere el device, pero podemos especificarlo
-        # if device: kwargs['device'] = device
+        # Permite pasar argumentos adicionales a CrossEncoder, como torch_dtype
+        automodel_args = kwargs.get("automodel_args", {"torch_dtype": "auto"})
+        trust_remote_code = kwargs.get("trust_remote_code", True) # Necesario para Jina
 
-        print(f"Initializing JinaReranker model '{model_name}'...")
+        print(f"Initializing CrossEncoder model '{model_name}'...")
         try:
-            # La inicialización puede variar ligeramente según la versión de jina-reranker
-            # Consulta la documentación de jina-reranker si esto falla
-            self.client = JinaRerankerClient(model_name, api_key=self.api_key, **kwargs)
-            print("JinaReranker model loaded.")
+            # Carga el modelo CrossEncoder
+            self.model = CrossEncoder(
+                model_name,
+                max_length=1024, # Ajusta según el modelo, Jina recomienda 1024
+                device=device, # None para auto-detección
+                automodel_args=automodel_args,
+                trust_remote_code=trust_remote_code
+            )
+            print("CrossEncoder model loaded.")
         except Exception as e:
-            print(f"Error initializing JinaReranker model '{model_name}': {e}")
+            print(f"Error loading CrossEncoder model '{model_name}': {e}")
             raise
 
     def rerank(self, query: str, documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Reordena documentos usando Jina Reranker."""
+        """Reordena documentos usando CrossEncoder."""
         if not documents:
             return []
 
-        # Extrae el contenido de texto para el reranker
-        # Asegura que el contenido exista y sea string
+        # Extrae el contenido de texto relevante para el reranking
+        # Usa el 'content' que se pasó al reranker (header + chunk_text)
         doc_contents = [str(doc.get('content', '')) for doc in documents]
 
+        # Crea los pares [query, document_content]
+        sentence_pairs = [[query, doc_content] for doc_content in doc_contents]
+
         try:
-            # Llama a la API de Jina (o modelo local)
-            # Asume que el método es 'compute_score' o similar - VERIFICAR DOCS JINA
-            # El formato de salida esperado es una lista de scores o dicts {index: score}
-            # Ejemplo basado en documentación común:
-            reranked_results = self.client.rerank(query, doc_contents, return_documents=False) # Pide solo scores/indices
-            # reranked_results suele ser [{'index': original_idx, 'relevance_score': score}, ...]
+            # Calcula los scores usando predict
+            # batch_size puede ajustarse según la memoria de la GPU/CPU
+            scores = self.model.predict(sentence_pairs, convert_to_numpy=True, show_progress_bar=False)
 
-            if not isinstance(reranked_results, list):
-                 print("Warning: Jina reranker did not return a list of results.")
-                 return documents # Devuelve original si el formato es inesperado
+            if scores is None or len(scores) != len(documents):
+                print("Warning: CrossEncoder predict did not return expected scores.")
+                return sorted(documents, key=lambda x: x.get('similarity', 0.0), reverse=True)
 
-            # Crea un mapeo de índice original a score nuevo
-            score_map = {result['index']: result['relevance_score'] for result in reranked_results}
-
-            # Actualiza los scores en los documentos originales y crea la lista reordenada
-            updated_docs = []
+            # Actualiza la similaridad en los documentos originales
             for i, doc in enumerate(documents):
-                 if i in score_map:
-                      doc['similarity'] = float(score_map[i]) # Actualiza score
-                      updated_docs.append(doc)
-                 # Opcional: ¿Qué hacer si un doc no está en score_map? ¿Excluirlo o darle score bajo?
-                 # else:
-                 #      doc['similarity'] = -1.0 # Ejemplo: score muy bajo
-                 #      updated_docs.append(doc)
+                doc['similarity'] = float(scores[i]) # Actualiza con el nuevo score
 
-            # Ordena por el nuevo score 'similarity'
-            updated_docs.sort(key=lambda x: x['similarity'], reverse=True)
-            return updated_docs
+            # Ordena los documentos por el nuevo score
+            documents.sort(key=lambda x: x['similarity'], reverse=True)
+            return documents
 
         except Exception as e:
-            print(f"Error during Jina reranking: {e}")
-            # Fallback: Devuelve los documentos ordenados por score original si falla el reranking
+            print(f"Error during CrossEncoder reranking: {e}")
+            # Fallback: Devuelve ordenado por score original
             return sorted(documents, key=lambda x: x.get('similarity', 0.0), reverse=True)
-
 
     def to_dict(self):
         """Serializa configuración."""
-        # No incluye api_key
-        return {"subclass_name": "JinaReranker", "model_name": self.model_name}
+        # device no se serializa fácilmente, se re-detectará al cargar
+        return {"subclass_name": "CrossEncoderReranker", "model_name": self.model_name}
+
+# Añade la nueva clase al registro para from_dict
+Reranker.SUBCLASSES["CrossEncoderReranker"] = CrossEncoderReranker
