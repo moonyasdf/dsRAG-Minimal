@@ -1,6 +1,7 @@
-from typing import Optional, TypedDict, List # Añadido List
-# Importa FileSystem desde la ubicación correcta
-from ..file_parsing.file_system import FileSystem
+# dsrag_minimal/dsparse/models/types.py
+from typing import Optional, TypedDict, List, Dict, Any # Añadido Dict, Any
+# Importación absoluta
+from dsparse.file_parsing.file_system import FileSystem # Asume que FileSystem está aquí
 
 class Line(TypedDict):
     content: str
