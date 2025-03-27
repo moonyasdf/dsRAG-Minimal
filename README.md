@@ -78,3 +78,34 @@ A primary goal was to achieve high performance, targeting sub-3-second context p
 *   Optimizing data handling and processing steps.
 *   Potentially sacrificing some code readability for speed, offset by detailed comments (`#`).
 Actual performance depends heavily on hardware, the specific local models used, and KB size.
+
+## Model Flexibility: Bring Your Own Models!
+`dsRAG-Minimalist` uses a dependency injection pattern. You initialize the required model components (Embedding, LLM, Reranker) *outside* the `KnowledgeBase` and pass them in.
+
+**Example: Initializing with Local Models (Default in Examples)**
+
+```python
+from dsrag_minimal.core import KnowledgeBase, SentenceTransformerEmbedding, OllamaLLM, JinaReranker
+from dsrag_minimal.database.vector import QdrantVectorDB
+import os
+
+# 1. Instantiate Models
+embedding = SentenceTransformerEmbedding(model_name="intfloat/multilingual-e5-large-instruct", dimension=1024)
+reranker = JinaReranker(model_name="jina-reranker-v2-base-multilingual")
+llm = OllamaLLM(model="gemma:9b") # For AutoContext / Sectioning
+
+# 2. Configure Storage (Qdrant path)
+storage_dir = os.path.expanduser("~/dsrag_minimal_data")
+qdrant_path = os.path.join(storage_dir, "qdrant_data")
+qdrant_db = QdrantVectorDB(kb_id="my_local_kb", vector_dimension=embedding.dimension, path=qdrant_path)
+
+# 3. Inject into KnowledgeBase
+kb = KnowledgeBase(
+    kb_id="my_local_kb",
+    embedding_model=embedding,
+    auto_context_model=llm,
+    reranker=reranker,
+    vector_db=qdrant_db, # Inject Qdrant instance
+    storage_directory=storage_dir # For SQLite chunks/metadata
+    # vector_dimension is inferred or passed to Qdrant directly
+)
