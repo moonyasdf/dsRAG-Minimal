@@ -4,7 +4,7 @@ from typing import Optional, List, Union
 import os
 import ollama
 import numpy as np
-from openai import OpenAI # Necesario para OpenAIEmbedding
+from openai import OpenAI
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -13,9 +13,12 @@ try:
 except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     class SentenceTransformer: pass
-    class torch: # Placeholder simple para que el type hint funcione
-         @staticmethod
-         def cuda.is_available(): return False
+    class torch: # Placeholder
+        @staticmethod
+        def cuda(): return CudaModulePlaceholder() # Placeholder anidado
+class CudaModulePlaceholder: # Placeholder para cuda
+     @staticmethod
+     def is_available(): return False
 
 # Tipo para vectores
 Vector = Union[List[float], np.ndarray]
