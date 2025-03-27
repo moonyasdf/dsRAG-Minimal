@@ -7,12 +7,12 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any, Iterator, Union # Añade Iterator y Union
 
 # Importaciones internas refactorizadas
-from .db import ChatThreadDB
-from .chat_types import ChatThreadParams, MetadataFilter, ChatResponseInput
-from .auto_query import get_search_queries
-from .citations import format_sources_for_context, ResponseWithCitations, Citation, PartialResponseWithCitations
-from ..core.llm import LLM, get_response_via_instance
-from ..core.knowledge_base import KnowledgeBase # Importa KB para type hint
+from chat.database.db import ChatThreadDB
+from chat.chat_types import ChatThreadParams, MetadataFilter, ChatResponseInput
+from chat.auto_query import get_search_queries
+from chat.citations import format_sources_for_context, ResponseWithCitations, Citation, PartialResponseWithCitations
+from core.llm import LLM, get_response_via_instance
+from core.knowledge_base import KnowledgeBase # Importa KB para type hint
 # from ..utils.model_names import OPENAI_MODEL_NAMES, ANTHROPIC_MODEL_NAMES, GEMINI_MODEL_NAMES # Para detección de proveedor en get_response
 
 # --- Carga de Prompts ---
