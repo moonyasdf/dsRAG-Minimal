@@ -10,8 +10,8 @@ import contextlib
 import logging
 import json # Importa json para serializar/deserializar metadata y rse_params
 
-from .db import ChunkDB # Importa la clase base simplificada
-from .types import FormattedDocument # Importa tipos
+from database.chunk.db import ChunkDB # Importa la clase base simplificada
+from database.chunk.types import FormattedDocument # Importa tipos
 
 class SQLiteDB(ChunkDB):
     """Implementación de ChunkDB usando SQLite para almacenamiento local."""
