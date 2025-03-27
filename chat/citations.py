@@ -7,7 +7,7 @@ import os
 import json
 
 # Usa ruta relativa correcta
-from ..dsparse.file_parsing.file_system import FileSystem
+from dsparse.file_parsing.file_system import FileSystem
 
 class Citation(BaseModel):
     """Representa una única citación a una fuente."""
