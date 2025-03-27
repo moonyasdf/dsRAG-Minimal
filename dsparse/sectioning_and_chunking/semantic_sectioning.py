@@ -8,8 +8,8 @@ import instructor
 import warnings
 
 # Importa tipos y LLM
-from ...core.llm import LLM, get_response_via_instance # Usa la función inyectable
-from ..models.types import Line, Section
+from core.llm import LLM, get_response_via_instance
+from dsparse.models.types import Line, Section
 
 # --- Carga de Prompt ---
 PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts') # Ajusta ruta
