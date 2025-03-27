@@ -4,17 +4,18 @@ from typing import Optional, List, Union
 import os
 import ollama
 import numpy as np
-from openai import OpenAI
+from openai import OpenAI # Necesario para OpenAIEmbedding
 
-# Importación opcional para SentenceTransformer
 try:
     from sentence_transformers import SentenceTransformer
     import torch
     SENTENCE_TRANSFORMERS_AVAILABLE = True
 except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
-    # Define un placeholder si no está instalado para que el resto del código importe
     class SentenceTransformer: pass
+    class torch: # Placeholder simple para que el type hint funcione
+         @staticmethod
+         def cuda.is_available(): return False
 
 # Tipo para vectores
 Vector = Union[List[float], np.ndarray]
