@@ -51,7 +51,7 @@ This version represents a significant refactoring of the original dsRAG library,
     *   Hardcoded to use **`LocalFileSystem`**. Support for S3FileSystem has been removed.
 *   **Model Integration:**
     *   **Injection:** `KnowledgeBase`, `get_chat_thread_response`, etc., now rely on users *injecting* instances of `Embedding`, `LLM`, and `Reranker` classes. No default API clients are instantiated internally.
-    *   **Local Model Examples:** Examples (`01_create_kb_local.py`, `03_query_kb.py`, `04_chat_basic.py`) demonstrate using Ollama, `sentence-transformers`, and `jina-reranker` for a fully local setup. Specific models requested are used (`intfloat/multilingual-e5-large-instruct`, `jina-reranker-v2-base-multilingual`, `gemma:9b` via Ollama).
+    *   **Local Model Examples:** Examples (`01_create_kb_local.py`, `03_query_kb.py`, `04_chat_basic.py`) demonstrate using Ollama, `sentence-transformers`, and `jina-reranker` for a fully local setup. Specific models requested are used (`intfloat/multilingual-e5-large-instruct`, `jina-reranker-v2-base-multilingual`, `gemma3:1b` via Ollama).
     *   **API Flexibility:** Users can still use APIs (OpenAI, Anthropic, OpenRouter, LM Studio, etc.) by creating or using compatible `LLM` or `Embedding` wrapper classes and injecting those instances. Example `04_chat_basic.py` includes commented-out sections for LM Studio/OpenRouter.
 *   **Code Structure:** Refactored into clearer sub-packages (`core`, `database`, `chat`, `dsparse`, `utils`).
 *   **External Prompts:** All LLM prompts are loaded from `.txt` files in `/prompts`.
