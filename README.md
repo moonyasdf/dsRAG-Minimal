@@ -92,7 +92,7 @@ import os
 # 1. Instantiate Models
 embedding = SentenceTransformerEmbedding(model_name="intfloat/multilingual-e5-large-instruct", dimension=1024)
 reranker = JinaReranker(model_name="jina-reranker-v2-base-multilingual")
-llm = OllamaLLM(model="gemma:9b") # For AutoContext / Sectioning
+llm = OllamaLLM(model="gemma3:1b") # For AutoContext / Sectioning
 
 # 2. Configure Storage (Qdrant path)
 storage_dir = os.path.expanduser("~/dsrag_minimal_data")
