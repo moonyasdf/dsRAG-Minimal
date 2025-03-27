@@ -13,7 +13,7 @@ from .auto_query import get_search_queries
 from .citations import format_sources_for_context, ResponseWithCitations, Citation, PartialResponseWithCitations
 from ..core.llm import LLM, get_response_via_instance
 from ..core.knowledge_base import KnowledgeBase # Importa KB para type hint
-from ..utils.model_names import OPENAI_MODEL_NAMES, ANTHROPIC_MODEL_NAMES, GEMINI_MODEL_NAMES # Para detección de proveedor en get_response
+# from ..utils.model_names import OPENAI_MODEL_NAMES, ANTHROPIC_MODEL_NAMES, GEMINI_MODEL_NAMES # Para detección de proveedor en get_response
 
 # --- Carga de Prompts ---
 PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', 'prompts')
