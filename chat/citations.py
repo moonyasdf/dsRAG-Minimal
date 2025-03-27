@@ -4,9 +4,9 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Tuple
 import instructor
 import os
-import json # Asegura que json está importado
+import json
 
-# Importa FileSystem desde dsparse
+# Usa ruta relativa correcta
 from ..dsparse.file_parsing.file_system import FileSystem
 
 class Citation(BaseModel):
