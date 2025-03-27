@@ -8,29 +8,28 @@ import concurrent.futures
 from tqdm import tqdm
 import json # Para serializar/deserializar metadata
 
-# Importaciones refactorizadas y mínimas
-from ..dsparse.main import parse_and_chunk # Función principal de dsparse
-from .embedding import Embedding, OllamaEmbedding # Embedding base y Ollama
-from .reranker import Reranker, NoReranker # Reranker base y NoReranker
-from .llm import LLM, OllamaLLM, OpenAILLM, AnthropicLLM, get_response_via_instance # LLM base, Ollama, ejemplos API, y función get_response inyectable
-from ..database.vector.qdrant_db import QdrantVectorDB # ÚNICO VectorDB
+# Desde dsparse (paquete hermano)
+from dsparse.main import parse_and_chunk
+from dsparse.models.types import FileParsingConfig, SemanticSectioningConfig, ChunkingConfig, Section, Chunk
+from dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
 
-# Importa tipos desde la ubicación correcta
-from ..database.vector.types import MetadataFilter, Vector, ChunkMetadata, VectorSearchResult # Tipos necesarios
-from ..database.chunk.sqlite_db import SQLiteDB # ÚNICO ChunkDB
-
-# Importa FileSystem desde la ubicación correcta
-from ..dsparse.file_parsing.file_system import FileSystem, LocalFileSystem # ÚNICO FileSystem
-from ..metadata import MetadataStorage, LocalMetadataStorage # Almacenamiento de metadatos
-from .rse import get_relevance_values, get_best_segments, get_meta_document, RSE_PARAMS_PRESETS # Lógica RSE
-from .auto_context import ( # Lógica AutoContext
+# Desde core (mismo paquete)
+from core.embedding import Embedding, OllamaEmbedding # Importa las clases base/concretas que podrías necesitar aquí
+from core.reranker import Reranker, NoReranker
+from core.llm import LLM #, OllamaLLM, OpenAILLM, AnthropicLLM # No necesitas importar las concretas aquí si se inyectan
+from core.rse import get_relevance_values, get_best_segments, get_meta_document, RSE_PARAMS_PRESETS
+from core.auto_context import (
     get_document_title, get_document_summary, get_section_summary,
-    get_chunk_header, get_segment_header,
-    # Funciones para cargar prompts desde archivos
-    _load_prompt
+    get_chunk_header, get_segment_header, _load_prompt
 )
-# Importa tipos desde dsparse
-from ..dsparse.models.types import FileParsingConfig, SemanticSectioningConfig, ChunkingConfig, Section, Chunk
+
+# Desde database (paquete hermano)
+from database.vector.qdrant_db import QdrantVectorDB
+from database.vector.types import MetadataFilter, Vector, ChunkMetadata, VectorSearchResult
+from database.chunk.sqlite_db import SQLiteDB
+
+# Desde metadata (módulo en la raíz)
+from metadata import MetadataStorage, LocalMetadataStorage
 
 # Constantes para nombres de archivos de prompts
 PROMPT_FILES = {
