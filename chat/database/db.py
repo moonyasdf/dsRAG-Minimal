@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 # Usa ruta relativa correcta a chat_types
-from ..chat_types import ChatThreadParams
+from chat.chat_types import ChatThreadParams
 
 class ChatThreadDB(ABC):
     """Clase base abstracta para almacenar historiales de chat."""
