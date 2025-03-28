@@ -10,7 +10,7 @@ import json # Para serializar/deserializar metadata
 
 # Desde dsparse (paquete hermano)
 from dsparse.main import parse_and_chunk
-from dsparse.models.types import FileParsingConfig, SemanticSectioningConfig, ChunkingConfig, Section, Chunk
+from dsparse.models.types import SemanticSectioningConfig, ChunkingConfig, Section, Chunk
 from dsparse.file_parsing.file_system import FileSystem, LocalFileSystem
 
 # Desde core (mismo paquete)
