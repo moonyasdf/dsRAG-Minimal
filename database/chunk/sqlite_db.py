@@ -210,8 +210,10 @@ class SQLiteDB(ChunkDB):
         if include_content:
             columns_to_select.extend(["chunk_text", "chunk_index"])
 
-        select_cols_str = f"\"{ '\", \"'.join(columns_to_select) }\""
-        sql = f"SELECT {select_cols_str} FROM chunks WHERE doc_id = ? ORDER BY chunk_index"
+        # Construye la cadena de selección de columnas por separado
+        select_cols_str = '", "'.join(columns_to_select)
+        # Usa la variable en la f-string
+        sql = f'SELECT "{select_cols_str}" FROM chunks WHERE doc_id = ? ORDER BY chunk_index'
         rows = self._get_rows(sql, (doc_id,))
 
         if not rows:
