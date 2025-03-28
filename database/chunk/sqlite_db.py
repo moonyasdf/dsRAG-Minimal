@@ -141,8 +141,12 @@ class SQLiteDB(ChunkDB):
         """Añade los chunks de un documento a la tabla SQLite."""
         def _add_doc_op(conn: sqlite3.Connection, data_to_insert: list) -> None:
             c = conn.cursor()
-            # Usa REPLACE para manejar upserts (si un chunk ya existe con el mismo doc_id/chunk_index, se reemplaza)
-            sql = f"REPLACE INTO chunks (\"{ '\", \"'.join(self.column_names) }\") VALUES ({', '.join(['?'] * len(self.column_names))})"
+            # Construye la parte de los nombres de columna por separado
+            column_names_str = '", "'.join(self.column_names)
+            # Construye la parte de los placeholders
+            placeholders_str = ', '.join(['?'] * len(self.column_names))
+            # Usa las variables pre-construidas en la f-string
+            sql = f'REPLACE INTO chunks ("{column_names_str}") VALUES ({placeholders_str})'
             c.executemany(sql, data_to_insert)
             conn.commit()
 
