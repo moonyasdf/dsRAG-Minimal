@@ -5,7 +5,7 @@
 import os
 import time
 import sqlite3
-from typing import Any, Optional, ContextManager, Dict, List
+from typing import Any, Optional, ContextManager, Dict, List, Tuple
 import contextlib
 import logging
 import json # Importa json para serializar/deserializar metadata y rse_params
